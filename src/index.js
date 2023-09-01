@@ -32,27 +32,27 @@ function handlerSubmit(evt) {
             // elem.gallery.insertAdjacentHTML('beforeend', createMarkup(response.data));
             // console.log(`data`, data);
             console.log(`tags`, resp.data);
-            console.log(`tags arr`, resp.data.hits);
-            console.log(`likes`, resp.data.hits[0].likes);
-            console.log(`tags`, resp.data.hits[0].tags);
-            console.log(`previewURL`, resp.data.hits[0].previewURL);
+            // console.log(`tags arr`, resp.data.hits);
+            // console.log(`likes`, resp.data.hits[0].likes);
+            // console.log(`tags`, resp.data.hits[0].tags);
+            // console.log(`previewURL`, resp.data.hits[0].previewURL);
         })
 
     function createMarkup(arr) {
-        return arr.map(() => `<div class="photo-card">
-            <img src="" alt="" loading="lazy" />
+        return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) => `<div class="photo-card">
+            <img src="${webformatURL}" alt="${tags}" loading="lazy" />
             <div class="info">
                 <p class="info-item">
-                    <b>Likes</b>
+                    <b>Likes: ${likes}</b>
                 </p>
                 <p class="info-item">
-                    <b>Views</b>
+                    <b>Views ${views}</b>
                 </p>
                 <p class="info-item">
-                    <b>Comments</b>
+                    <b>Comments ${comments}</b>
                 </p>
                 <p class="info-item">
-                    <b>Downloads</b>
+                    <b>Downloads ${downloads}</b>
                 </p>
             </div>
             </div>`).join('');
@@ -64,11 +64,3 @@ function handlerSubmit(evt) {
 
 
 
-// З объекту интересны только следующие свойства:
-// webformatURL - ссылка на маленькое изображение для списка карточек.
-// largeImageURL - ссылка на большое изображение.
-// tags - строка с описанием изображения.Подойдет для атрибута alt.
-// likes - количество лайков.
-// views - количество просмотров.
-// comments - количество комментариев.
-// downloads - количество загрузок.
