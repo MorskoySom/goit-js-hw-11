@@ -1,2 +1,13 @@
-@import './common';
-@import './example';
+.input-block {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    background-color: rgba(33, 192, 158, 0.5);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+}
