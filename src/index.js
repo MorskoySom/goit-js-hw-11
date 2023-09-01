@@ -28,37 +28,32 @@ function handlerSubmit(evt) {
         return await axios.get(`https://pixabay.com/api/?${params}`)
     }
     fetchQuerry(query)
-        .then(resp => {
-            // elem.gallery.insertAdjacentHTML('beforeend', createMarkup(response.data));
-            // console.log(`data`, data);
-            console.log(`tags`, resp.data);
-            // console.log(`tags arr`, resp.data.hits);
-            // console.log(`likes`, resp.data.hits[0].likes);
-            // console.log(`tags`, resp.data.hits[0].tags);
-            // console.log(`previewURL`, resp.data.hits[0].previewURL);
-        })
+        .then(resp => elem.gallery.innerHTML = createMarkup(resp.data.hits))
+        .catch(err => console.log(err))
 
     function createMarkup(arr) {
         return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) => `<div class="photo-card">
-            <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+            <div class="img-size">
+                <img class="img-size" src="${webformatURL}" alt="${tags}" loading="lazy" />
+            </div>
             <div class="info">
-                <p class="info-item">
-                    <b>Likes: ${likes}</b>
-                </p>
-                <p class="info-item">
-                    <b>Views ${views}</b>
-                </p>
-                <p class="info-item">
-                    <b>Comments ${comments}</b>
-                </p>
-                <p class="info-item">
-                    <b>Downloads ${downloads}</b>
-                </p>
+                <p class="info-item"><b>Likes</b><br /> ${likes}</p>                
+                <p class="info-item"><b>Views</b><br /> ${views}</p>
+                <p class="info-item"><b>Comments:</b><br /> ${comments}</p>
+                <p class="info-item"><b>Downloads:</b><br /> ${downloads}</p>
             </div>
             </div>`).join('');
     }
 }
 
+// <p class="info-item"><b>Likes</b><b>${likes}</b></p>
+
+// <div class="info">
+//     <p class="info-item"><b>Likes:</b> ${likes}</p>
+//     <p class="info-item"><b>Views:</b> ${views}</p>
+//     <p class="info-item"><b>Comments:</b> ${comments}</p>
+//     <p class="info-item"><b>Downloads:</b> ${downloads}</p>
+// </div>
 
 
 

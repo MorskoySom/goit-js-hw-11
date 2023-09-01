@@ -11,3 +11,33 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
     z-index: 1000;
 }
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
+    margin-top: 90px;
+}
+
+.photo-card {
+    box-sizing: border-box;
+    padding: 5px;
+    flex-basis: calc(25% - 16px);
+
+}
+
+.img-size {
+    width: 100%;
+    height: 300px;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    /* Рядочок для підписів */
+    justify-content: space-between;
+    /* Рівномірний розподіл між підписами */
+    align-items: center;
+    /* Вирівнювання по вертикалі по центру (опціонально) */
+}
