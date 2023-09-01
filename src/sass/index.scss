@@ -32,11 +32,17 @@
     height: 250px;
 }
 
+.info-item {
+    text-align: center;
+}
+
 .info {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding: 5px;
+    gap: 5px;
     background-color: rgba(33, 192, 158, 0.15);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
