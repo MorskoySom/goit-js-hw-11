@@ -23,14 +23,6 @@ function handlerSubmit(evt) {
             per_page: 40
         })
         return await axios.get(`https://pixabay.com/api/?${params}`)
-        // .then((resp) => {
-        //     if (!resp.hits) {
-        //         throw new Error(resp.status);
-        //     } else {
-        //         return resp.hits;
-        //     }
-        // })
-
     }
     fetchQuerry(query)
         .then((resp) => {
