@@ -13,6 +13,7 @@ function handlerSubmit(evt) {
     let query = elem.form[0].value.trim();
 
     async function fetchQuerry(query) {
+        elem.gallery.innerHTML = ``
         const params = new URLSearchParams({
             key: "39170790-720d13338eae2dc65ab148b0f",
             q: query,
@@ -22,12 +23,24 @@ function handlerSubmit(evt) {
             per_page: 40
         })
         return await axios.get(`https://pixabay.com/api/?${params}`)
+        // .then((resp) => {
+        //     if (!resp.hits) {
+        //         throw new Error(resp.status);
+        //     } else {
+        //         return resp.hits;
+        //     }
+        // })
 
     }
     fetchQuerry(query)
         .then((resp) => {
-            elem.gallery.innerHTML = createMarkup(resp.data.hits)
-            Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images`)
+            console.log(resp.data);
+            if (resp.data.totalHits === 0) {
+                Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
+            } else {
+                elem.gallery.innerHTML = createMarkup(resp.data.hits)
+                Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images`)
+            }
         })
         .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
 
