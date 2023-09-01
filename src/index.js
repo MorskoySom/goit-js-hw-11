@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
-const axios = require('axios');
 
 // axios.defaults.headers.common["x-api-key"] = "39170790-720d13338eae2dc65ab148b0f";
 
@@ -38,6 +37,26 @@ function handlerSubmit(evt) {
             console.log(`tags`, resp.data.hits[0].tags);
             console.log(`previewURL`, resp.data.hits[0].previewURL);
         })
+
+    function createMarkup(arr) {
+        return arr.map(() => `<div class="photo-card">
+            <img src="" alt="" loading="lazy" />
+            <div class="info">
+                <p class="info-item">
+                    <b>Likes</b>
+                </p>
+                <p class="info-item">
+                    <b>Views</b>
+                </p>
+                <p class="info-item">
+                    <b>Comments</b>
+                </p>
+                <p class="info-item">
+                    <b>Downloads</b>
+                </p>
+            </div>
+            </div>`).join('');
+    }
 }
 
 
