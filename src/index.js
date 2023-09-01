@@ -1,8 +1,6 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
 
-// axios.defaults.headers.common["x-api-key"] = "39170790-720d13338eae2dc65ab148b0f";
-
 const elem = {
     form: document.querySelector(`#search-form`),
     gallery: document.querySelector(`.gallery`)
@@ -45,15 +43,6 @@ function handlerSubmit(evt) {
             </div>`).join('');
     }
 }
-
-// <p class="info-item"><b>Likes</b><b>${likes}</b></p>
-
-// <div class="info">
-//     <p class="info-item"><b>Likes:</b> ${likes}</p>
-//     <p class="info-item"><b>Views:</b> ${views}</p>
-//     <p class="info-item"><b>Comments:</b> ${comments}</p>
-//     <p class="info-item"><b>Downloads:</b> ${downloads}</p>
-// </div>
 
 
 
