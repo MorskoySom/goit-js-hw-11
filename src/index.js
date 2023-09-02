@@ -5,7 +5,6 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const galleryLightBox = new SimpleLightbox('.gallery a');
 
-
 const elem = {
     form: document.querySelector(`#search-form`),
     gallery: document.querySelector(`.gallery`),
@@ -43,6 +42,16 @@ function handlerSubmit(evt) {
                 elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
                 galleryLightBox.refresh()
                 Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images`)
+
+                const { height: cardHeight } = document
+                    .querySelector(".gallery")
+                    .firstElementChild.getBoundingClientRect();
+
+                window.scrollBy({
+                    top: cardHeight * 2,
+                    behavior: "smooth",
+                });
+
             }
             observer.observe(elem.guard);
         })
@@ -62,22 +71,6 @@ function handlerSubmit(evt) {
             </div>`).join('');
     }
 
-    // function createMarkup(arr) {
-    //     return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) => 
-    //     `<div class="photo-card">
-    //         <a href="${largeImageURL}" class="lightbox-link">
-    //             <img class="img-size" src="${webformatURL}" alt="${tags}" loading="lazy" />
-    //         </a>
-    //         <div class="info">
-    //             <p class="info-item"><b>Likes</b><br /> ${likes}</p>
-    //             <p class="info-item"><b>Views</b><br /> ${views}</p>
-    //             <p class="info-item"><b>Comments</b><br /> ${comments}</p>
-    //             <p class="info-item"><b>Downloads</b><br /> ${downloads}</p>
-    //         </div>
-    //     </div>
-    // `).join('');
-    // }
-
     const options = {
         rootMargin: "300px",
     }
@@ -91,8 +84,6 @@ function handlerSubmit(evt) {
                     .then((resp) => {
                         elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
                         galleryLightBox.refresh()
-                        // console.log(resp.data.totalHits)
-                        // console.dir(resp.data)
                     })
                     .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
             }
