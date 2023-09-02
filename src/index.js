@@ -9,22 +9,39 @@ const elem = {
 
 let currentPage = 1;
 
-const options = {
-    rootMargin: "300px",
-}
-const observer = new IntersectionObserver(handlerLoadMore, options);
+
 
 elem.form.addEventListener('submit', handlerSubmit);
 
-function handlerLoadMore(entries) {
-    entries.forEach((entry) => {
-    });
-}
 
 function handlerSubmit(evt) {
     evt.preventDefault();
     let query = elem.form[0].value.trim();
-    // let currentPage = 1;
+
+    const options = {
+        rootMargin: "300px",
+    }
+    const observer = new IntersectionObserver(handlerLoadMore, options);
+
+    function handlerLoadMore(entries) {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                currentPage += 1;
+                fetchQuerry(query, currentPage)
+                    .then((resp) => {
+                        if (resp.data.totalHits === 0) {
+                            Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
+                        } else {
+                            // elem.gallery.innerHTML = createMarkup(resp.data.hits)
+                            elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
+                            Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images`)
+                        }
+                        // observer.observe(elem.guard);
+                    })
+                    .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
+            }
+        });
+    }
 
     async function fetchQuerry(query, currentPage = `1`) {
         elem.gallery.innerHTML = ``
@@ -39,14 +56,13 @@ function handlerSubmit(evt) {
         })
         return await axios.get(`https://pixabay.com/api/?${params}`)
     }
-    fetchQuerry(query)
+    fetchQuerry(query, currentPage)
         .then((resp) => {
-            // console.log(resp.data);
             if (resp.data.totalHits === 0) {
                 Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
             } else {
                 // elem.gallery.innerHTML = createMarkup(resp.data.hits)
-                elem.gallery.insertAdjacentHTML(createMarkup(resp.data.hits))
+                elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
                 Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images`)
             }
             observer.observe(elem.guard);
