@@ -8,43 +8,17 @@ const elem = {
 }
 
 let currentPage = 1;
-
-
+let query;
 
 elem.form.addEventListener('submit', handlerSubmit);
 
-
 function handlerSubmit(evt) {
     evt.preventDefault();
-    let query = elem.form[0].value.trim();
-
-    const options = {
-        rootMargin: "300px",
-    }
-    const observer = new IntersectionObserver(handlerLoadMore, options);
-
-    function handlerLoadMore(entries) {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                currentPage += 1;
-                fetchQuerry(query, currentPage)
-                    .then((resp) => {
-                        if (resp.data.totalHits === 0) {
-                            Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
-                        } else {
-                            // elem.gallery.innerHTML = createMarkup(resp.data.hits)
-                            elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
-                            Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images`)
-                        }
-                        // observer.observe(elem.guard);
-                    })
-                    .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
-            }
-        });
-    }
+    elem.gallery.innerHTML = ``;
+    currentPage = 1;
+    query = elem.form[0].value.trim();
 
     async function fetchQuerry(query, currentPage = `1`) {
-        elem.gallery.innerHTML = ``
         const params = new URLSearchParams({
             key: "39170790-720d13338eae2dc65ab148b0f",
             q: query,
@@ -58,7 +32,9 @@ function handlerSubmit(evt) {
     }
     fetchQuerry(query, currentPage)
         .then((resp) => {
+            // console.log(resp.data.totalHits)
             if (resp.data.totalHits === 0) {
+                // elem.gallery.innerHTML = ``;
                 Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
             } else {
                 // elem.gallery.innerHTML = createMarkup(resp.data.hits)
@@ -81,6 +57,23 @@ function handlerSubmit(evt) {
                 <p class="info-item"><b>Downloads</b><br /> ${downloads}</p>
             </div>
             </div>`).join('');
+    }
+    const options = {
+        rootMargin: "300px",
+    }
+    const observer = new IntersectionObserver(handlerLoadMore, options);
+
+    function handlerLoadMore(entries) {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                currentPage += 1;
+                fetchQuerry(query, currentPage)
+                    .then((resp) => {
+                        elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
+                    })
+                    .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
+            }
+        });
     }
 }
 
