@@ -32,12 +32,9 @@ function handlerSubmit(evt) {
     }
     fetchQuerry(query, currentPage)
         .then((resp) => {
-            // console.log(resp.data.totalHits)
             if (resp.data.totalHits === 0) {
-                // elem.gallery.innerHTML = ``;
                 Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
             } else {
-                // elem.gallery.innerHTML = createMarkup(resp.data.hits)
                 elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
                 Notiflix.Notify.success(`Hooray! We found ${resp.data.totalHits} images`)
             }
@@ -46,10 +43,8 @@ function handlerSubmit(evt) {
         .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
 
     function createMarkup(arr) {
-        return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) => `<div class="photo-card">
-            
-                <img class="img-size" src="${webformatURL}" alt="${tags}" loading="lazy" />
-            
+        return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) => `<div class="photo-card">            
+            <img class="img-size" src="${webformatURL}" alt="${tags}" loading="lazy" />            
             <div class="info">
                 <p class="info-item"><b>Likes</b><br /> ${likes}</p>                
                 <p class="info-item"><b>Views</b><br /> ${views}</p>
