@@ -1,5 +1,7 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const elem = {
     form: document.querySelector(`#search-form`),
@@ -43,7 +45,9 @@ function handlerSubmit(evt) {
         .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
 
     function createMarkup(arr) {
-        return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) => `<div class="photo-card">            
+        return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) =>
+            `<div class="photo-card">
+            <a href="${largeImageURL}" class="lightbox-link">                       
             <img class="img-size" src="${webformatURL}" alt="${tags}" loading="lazy" />            
             <div class="info">
                 <p class="info-item"><b>Likes</b><br /> ${likes}</p>                
@@ -53,6 +57,23 @@ function handlerSubmit(evt) {
             </div>
             </div>`).join('');
     }
+
+    // function createMarkup(arr) {
+    //     return arr.map(({ likes, views, comments, downloads, tags, webformatURL, largeImageURL }) => 
+    //     `<div class="photo-card">
+    //         <a href="${largeImageURL}" class="lightbox-link">
+    //             <img class="img-size" src="${webformatURL}" alt="${tags}" loading="lazy" />
+    //         </a>
+    //         <div class="info">
+    //             <p class="info-item"><b>Likes</b><br /> ${likes}</p>
+    //             <p class="info-item"><b>Views</b><br /> ${views}</p>
+    //             <p class="info-item"><b>Comments</b><br /> ${comments}</p>
+    //             <p class="info-item"><b>Downloads</b><br /> ${downloads}</p>
+    //         </div>
+    //     </div>
+    // `).join('');
+    // }
+
     const options = {
         rootMargin: "300px",
     }
@@ -65,12 +86,18 @@ function handlerSubmit(evt) {
                 fetchQuerry(query, currentPage)
                     .then((resp) => {
                         elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
+                        // console.log(resp.data.totalHits)
+                        // console.dir(resp.data)
                     })
                     .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
             }
         });
     }
 }
+
+var lightbox = new SimpleLightbox('.gallery a', {
+    captionDelay: 250
+});
 
 
 
