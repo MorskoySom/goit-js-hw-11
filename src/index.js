@@ -21,19 +21,10 @@ function handlerSubmit(evt) {
     elem.gallery.innerHTML = ``;
     currentPage = 1;
     query = elem.form[0].value.trim();
+    let allImagesLoaded = false;
+    console.log(elem.form[0].value);
+    console.dir(elem.form);
 
-    async function fetchQuerry(query, currentPage = `1`) {
-        const params = new URLSearchParams({
-            key: "39170790-720d13338eae2dc65ab148b0f",
-            q: query,
-            image_type: "photo",
-            orientation: "horizontal",
-            safesearch: true,
-            per_page: 40,
-            page: currentPage
-        })
-        return await axios.get(`https://pixabay.com/api/?${params}`)
-    }
     fetchQuerry(query, currentPage)
         .then((resp) => {
             if (resp.data.totalHits === 0) {
@@ -53,6 +44,7 @@ function handlerSubmit(evt) {
                 });
 
             }
+
             observer.observe(elem.guard);
         })
         .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
@@ -76,22 +68,49 @@ function handlerSubmit(evt) {
     }
     const observer = new IntersectionObserver(handlerLoadMore, options);
 
+
     function handlerLoadMore(entries) {
         entries.forEach((entry) => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && !allImagesLoaded) {
                 currentPage += 1;
+
                 fetchQuerry(query, currentPage)
                     .then((resp) => {
+                        console.dir(resp);
                         elem.gallery.insertAdjacentHTML(`beforeend`, createMarkup(resp.data.hits))
                         galleryLightBox.refresh()
+                        if (resp.data.hits.length === 0) {
+                            allImagesLoaded = true;
+                        }
+                        const { height: cardHeight } = document
+                            .querySelector(".gallery")
+                            .firstElementChild.getBoundingClientRect();
+
+                        window.scrollBy({
+                            top: cardHeight * 2,
+                            behavior: "smooth",
+                        });
                     })
                     .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
             }
         });
     }
+    elem.form.removeEventListener('submit', handlerSubmit);
 }
 
 
+async function fetchQuerry(query, currentPage = `1`) {
+    const params = new URLSearchParams({
+        key: "39170790-720d13338eae2dc65ab148b0f",
+        q: query,
+        image_type: "photo",
+        orientation: "horizontal",
+        safesearch: true,
+        per_page: 40,
+        page: currentPage
+    })
+    return await axios.get(`https://pixabay.com/api/?${params}`)
+}
 
 
 
